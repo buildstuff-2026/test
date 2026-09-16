@@ -1,0 +1,23 @@
+name: Deploy Ampersand Integration
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to Ampersand
+        uses: amp-labs/cli-action@v1
+        with:
+          api_key: ${{ secrets.AMP_API_KEY }}
+          project_id: ${{ secrets.AMP_PROJECT_ID }}
+          directory_path: "path/to/integration/"    #  Path to a folder with the amp.yml file. If not provided, the action will use the root directory.
+
+    
