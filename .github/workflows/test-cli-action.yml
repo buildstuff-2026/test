@@ -1,0 +1,30 @@
+name: Test cli-action fix
+
+on:
+  workflow_dispatch:
+    inputs:
+      action_ref:
+        description: "cli-action ref to test (e.g. fix/debian-trixie-base-image or v1)"
+        required: true
+        default: fix/debian-trixie-base-image
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Checkout cli-action at the chosen ref
+        uses: actions/checkout@v4
+        with:
+          repository: amp-labs/cli-action
+          ref: ${{ inputs.action_ref }}
+          path: .cli-action
+
+      - name: Deploy to Ampersand
+        uses: ./.cli-action
+        with:
+          api_key: ${{ secrets.AMP_API_KEY }}
+          project_id: ${{ secrets.AMP_PROJECT_ID }}
+          directory_path: "."
